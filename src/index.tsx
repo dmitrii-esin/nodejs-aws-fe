@@ -1,25 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "index.css";
+import { Provider } from "react-redux";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import axios from "axios";
 import App from "components/App/App";
 import { store } from "store/store";
-import { Provider } from "react-redux";
 import * as serviceWorker from "./serviceWorker";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { getIDToken } from "utils/utils";
-import axios from "axios";
+import { checkAuth } from "./auth";
+import "index.css";
 
-//TODO: refactor: 1) move IDs to env-vars, 2) move auth logic to authCongig.ts
-const CLIENT_ID = "5l53ucrhna3tqbkle6vmne9ja6";
-const DOMAIN = "https://metal-tickets-domain.auth.eu-west-1.amazoncognito.com";
-const REDIRECT_URL = "https://d12t0bvcb8pyyn.cloudfront.net";
-const loginPageUrl = `${DOMAIN}/login?client_id=${CLIENT_ID}&response_type=token&scope=aws.cognito.signin.user.admin+email+openid+phone+profile&redirect_uri=${REDIRECT_URL}`;
-
-const token = getIDToken();
-
-if (!token) {
-  window.location.replace(loginPageUrl);
-}
+checkAuth();
 
 axios.interceptors.response.use(
   (response) => {
